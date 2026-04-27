@@ -1,3 +1,13 @@
+### Version 5.6.2 (27th April 2026)
+#### Changed
+- ⚠️ Changed `AdjustRemoteTrigger.payload` to `AdjustRemoteTrigger.payloadJson`, exposing the remote trigger payload as a JSON string instead of `Map<String, dynamic>` to preserve backend payload values across platform bridges. If you used this feature in versions 5.6.0 or 5.6.1, please update to version 5.6.2 or later and switch to the new API.
+
+#### Native SDKs
+- **iOS:** [v5.6.2](https://github.com/adjust/ios_sdk/tree/v5.6.2)
+- **Android:** [v5.6.1](https://github.com/adjust/android_sdk/tree/v5.6.1)
+
+---
+
 ### Version 5.6.1 (17th April 2026)
 #### Fixed
 - Fixed an iOS issue where cold-start deep link handling could interfere with other plugins that listen for URL opens or universal links.
