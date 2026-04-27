@@ -8,11 +8,11 @@
 
 class AdjustRemoteTrigger {
   final String label;
-  final Map<String, dynamic> payload;
+  final String payloadJson;
 
   AdjustRemoteTrigger({
     required this.label,
-    required this.payload,
+    required this.payloadJson,
   });
 
   factory AdjustRemoteTrigger.fromMap(dynamic map) {
@@ -22,45 +22,21 @@ class AdjustRemoteTrigger {
       }
 
       final String? label = map['label'];
-      final dynamic payload = map['payload'];
+      final dynamic payloadJson = map['payloadJson'];
       if (label == null) {
         throw Exception('Missing required remote trigger label.');
       }
 
       return AdjustRemoteTrigger(
         label: label,
-        payload: _castPayload(payload),
+        payloadJson: payloadJson is String && payloadJson.isNotEmpty
+            ? payloadJson
+            : '{}',
       );
     } catch (e) {
       throw Exception(
           '[AdjustFlutter]: Failed to create AdjustRemoteTrigger object from given map object. Details: ' +
               e.toString());
     }
-  }
-
-  static Map<String, dynamic> _castPayload(dynamic payload) {
-    if (payload == null) {
-      return <String, dynamic>{};
-    }
-
-    if (payload is! Map) {
-      throw Exception('Remote trigger payload has unexpected type.');
-    }
-
-    return payload.map<String, dynamic>((dynamic key, dynamic value) {
-      return MapEntry<String, dynamic>(key.toString(), _castValue(value));
-    });
-  }
-
-  static dynamic _castValue(dynamic value) {
-    if (value is Map) {
-      return _castPayload(value);
-    }
-
-    if (value is List) {
-      return value.map<dynamic>(_castValue).toList();
-    }
-
-    return value;
   }
 }

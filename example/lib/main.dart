@@ -4,6 +4,7 @@ import 'package:adjust_sdk/adjust_config.dart';
 import 'package:adjust_sdk/adjust_event.dart';
 import 'package:adjust_sdk/adjust_event_failure.dart';
 import 'package:adjust_sdk/adjust_event_success.dart';
+import 'package:adjust_sdk/adjust_remote_trigger.dart';
 import 'package:adjust_sdk/adjust_session_failure.dart';
 import 'package:adjust_sdk/adjust_session_success.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       // configure deeplink callback
       config.deferredDeeplinkCallback = _handleDeferredDeeplink;
       config.directDeeplinkCallback = _handleDirectDeeplink;
+
+      // configure remote trigger callback
+      config.remoteTriggerCallback = _handleRemoteTrigger;
       
       // configure SKAN callback
       config.skanUpdatedCallback = _handleSkanUpdate;
@@ -247,6 +251,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           ? 'Direct deep link:\n\n(null)'
           : 'Direct deep link:\n\n$uri',
     );
+  }
+
+  /// handle remote trigger callbacks
+  void _handleRemoteTrigger(AdjustRemoteTrigger remoteTrigger) {
+    print('[AdjustExample]: Received remote trigger!');
+    print('[AdjustExample]: Remote trigger label: ${remoteTrigger.label}');
+    print('[AdjustExample]: Remote trigger payload JSON: ${remoteTrigger.payloadJson}');
   }
 
   /// handle SKAN updates
