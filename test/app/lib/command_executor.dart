@@ -610,10 +610,10 @@ class CommandExecutor {
       adjustConfig.remoteTriggerCallback =
           (AdjustRemoteTrigger remoteTrigger) {
         print(
-            '[CommandExecutor]: Remote Trigger Callback: ${remoteTrigger.label}, payload: ${remoteTrigger.payload}');
+            '[CommandExecutor]: Remote Trigger Callback: ${remoteTrigger.label}, payload: ${remoteTrigger.payloadJson}');
         TestLib.sendInfoMapToServer(localBasePath, <String, String?>{
           'label': remoteTrigger.label,
-          'payload': jsonEncode(remoteTrigger.payload),
+          'payload': remoteTrigger.payloadJson,
         });
       };
     }

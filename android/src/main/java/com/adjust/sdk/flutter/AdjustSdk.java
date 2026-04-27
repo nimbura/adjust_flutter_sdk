@@ -1610,68 +1610,16 @@ public class AdjustSdk implements FlutterPlugin, MethodCallHandler, ActivityAwar
         Adjust.setTestOptions(testOptions);
     }
 
-    private HashMap<String, Object> getRemoteTriggerMap(AdjustRemoteTrigger remoteTrigger) {
-        HashMap<String, Object> remoteTriggerMap = new HashMap<String, Object>();
+    private HashMap<String, String> getRemoteTriggerMap(AdjustRemoteTrigger remoteTrigger) {
+        HashMap<String, String> remoteTriggerMap = new HashMap<String, String>();
         if (remoteTrigger == null) {
             remoteTriggerMap.put("label", "");
-            remoteTriggerMap.put("payload", new HashMap<String, Object>());
+            remoteTriggerMap.put("payloadJson", "{}");
             return remoteTriggerMap;
         }
 
-        remoteTriggerMap.put("label", remoteTrigger.getLabel());
-        remoteTriggerMap.put("payload", jsonObjectToMap(remoteTrigger.getPayload()));
+        remoteTriggerMap.put("label", remoteTrigger.getLabel() != null ? remoteTrigger.getLabel() : "");
+        remoteTriggerMap.put("payloadJson", remoteTrigger.getPayload() != null ? remoteTrigger.getPayload().toString() : "{}");
         return remoteTriggerMap;
-    }
-
-    private HashMap<String, Object> jsonObjectToMap(JSONObject jsonObject) {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        if (jsonObject == null) {
-            return map;
-        }
-
-        JSONArray names = jsonObject.names();
-        if (names == null) {
-            return map;
-        }
-
-        for (int i = 0; i < names.length(); ++i) {
-            String key = names.optString(i, null);
-            if (key == null) {
-                continue;
-            }
-
-            map.put(key, jsonValueToObject(jsonObject.opt(key)));
-        }
-
-        return map;
-    }
-
-    private ArrayList<Object> jsonArrayToList(JSONArray jsonArray) {
-        ArrayList<Object> list = new ArrayList<Object>();
-        if (jsonArray == null) {
-            return list;
-        }
-
-        for (int i = 0; i < jsonArray.length(); ++i) {
-            list.add(jsonValueToObject(jsonArray.opt(i)));
-        }
-
-        return list;
-    }
-
-    private Object jsonValueToObject(Object value) {
-        if (value == null || value == JSONObject.NULL) {
-            return null;
-        }
-
-        if (value instanceof JSONObject) {
-            return jsonObjectToMap((JSONObject) value);
-        }
-
-        if (value instanceof JSONArray) {
-            return jsonArrayToList((JSONArray) value);
-        }
-
-        return value;
     }
 }

@@ -299,13 +299,21 @@ static NSString *dartSkanUpdatedCallback = nil;
         return;
     }
 
+    NSString *payloadJson = @"{}";
+    if ([remoteTrigger payload] != nil) {
+        NSString *remoteTriggerPayloadJson = [self toCompactJson:[remoteTrigger payload]];
+        if (remoteTriggerPayloadJson != nil) {
+            payloadJson = remoteTriggerPayloadJson;
+        }
+    }
+
     id keys[] = {
         @"label",
-        @"payload",
+        @"payloadJson",
     };
     id values[] = {
         [self getValueOrEmpty:[remoteTrigger label]],
-        [self getObjectValueOrEmpty:[remoteTrigger payload]],
+        payloadJson,
     };
     NSUInteger count = sizeof(values) / sizeof(id);
     NSDictionary *remoteTriggerMap = [NSDictionary dictionaryWithObjects:values
@@ -348,6 +356,18 @@ static NSString *dartSkanUpdatedCallback = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&writeError];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)toCompactJson:(id)object {
+    NSError *writeError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
+                                                       options:0
+                                                         error:&writeError];
+    if (jsonData == nil) {
+        return nil;
+    }
+
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
